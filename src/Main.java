@@ -42,12 +42,22 @@ public class Main {
         ois.close();
         System.out.println("Parent after Reading Byte Array " + parent);
 
-
         ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(parent);
-        System.out.println("json is now " + json);
+        String jsonFromParent = mapper.writeValueAsString(parent);
+        System.out.println("json is now " + jsonFromParent);
 
-        Parent testParent = mapper.readValue(json,Parent.class);
+        //write jsonFromParent to a file
+//        PrintWriter out = new PrintWriter(new FileWriter("jsonFromParent.out"));
+        PrintWriter out = new PrintWriter("jsonFromParent.out");
+        out.write(jsonFromParent);
+        out.flush();
+        out.close();
+
+        //read jsonFromFile from the file
+        BufferedReader in = new BufferedReader(new FileReader("jsonFromParent.out"));
+        String jsonFromFile = in.readLine();
+
+        Parent testParent = mapper.readValue(jsonFromFile,Parent.class);
         System.out.println("TestParent after reading from json " + testParent);
 
     }
