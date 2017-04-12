@@ -20,6 +20,8 @@ public class Main {
         oos.writeObject(parent);
         oos.flush();
         oos.close();
+        fos.flush();
+        fos.close();
 
         parent.setName("Dad");
         ByteArrayOutputStream baos = new ByteArrayOutputStream(1000);
@@ -27,6 +29,8 @@ public class Main {
         oos.writeObject(parent);
         oos.flush();
         oos.close();
+        baos.flush();
+        baos.close();
 
         byte[] parentSer = baos.toByteArray();
 
@@ -34,12 +38,14 @@ public class Main {
         ObjectInputStream ois = new ObjectInputStream(fis);
         parent = (Parent) ois.readObject();
         ois.close();
+        fis.close();
         System.out.println("Parent after Reading File " + parent);
 
         ByteArrayInputStream bais = new ByteArrayInputStream(parentSer);
         ois = new ObjectInputStream(bais);
         parent = (Parent) ois.readObject();
         ois.close();
+        bais.close();
         System.out.println("Parent after Reading Byte Array " + parent);
 
         ObjectMapper mapper = new ObjectMapper();
@@ -49,7 +55,7 @@ public class Main {
         //write jsonFromParent to a file
 //        PrintWriter out = new PrintWriter(new FileWriter("jsonFromParent.out"));
         PrintWriter out = new PrintWriter("jsonFromParent.out");
-        out.write(jsonFromParent);
+        out.println(jsonFromParent);
         out.flush();
         out.close();
 
@@ -59,6 +65,7 @@ public class Main {
 
         Parent testParent = mapper.readValue(jsonFromFile,Parent.class);
         System.out.println("TestParent after reading from json " + testParent);
+        in.close();
 
     }
 }
